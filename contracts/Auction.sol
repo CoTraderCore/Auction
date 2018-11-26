@@ -86,8 +86,8 @@ contract Auction is Crowdsale, Ownable{
     }
     else{
       uint256 r = calculateRate(weiToday.add(weiRaised));
-      if (r < 1000){
-        return _weiAmount.mul(1000);
+      if (r < rate.sub(bonus)){
+        return _weiAmount.mul(rate.sub(bonus));
       }else{
         return _weiAmount.mul(r);
       }
