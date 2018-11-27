@@ -50,7 +50,7 @@ contract Auction is Crowdsale, Ownable{
     return weiRaised.sub(previosWei);
   }
 
-  function returnUserETHByAddress()
+  function returnUserSendedETH()
   public view returns (uint256)
   {
     return usersETH[msg.sender];
