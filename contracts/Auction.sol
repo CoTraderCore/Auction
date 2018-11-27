@@ -14,7 +14,8 @@ contract Auction is Crowdsale, Ownable{
  uint256 public weiTodayMinimum;
  uint256 public weiTodayMaximum;
  uint256 public bonus;
- uint256 public hoursT = 5; //Remove this change to hardcode 24 hours
+ uint256 public hoursT = 5 minutes; //Remove this change to hardcode 24 hours
+ mapping (address => uint256) private usersETH;
 
  constructor(
     uint256 _rate,
@@ -49,26 +50,21 @@ contract Auction is Crowdsale, Ownable{
     return weiRaised.sub(previosWei);
   }
 
-
-  function calculateRate(uint256 _value)
-  internal view returns (uint256)
+  function returnUserETHByAddress()
+  public view returns (uint256)
   {
-    require(rate > 1000);
-
-    uint256 totalPercent;
-    uint256 onePercent;
-    uint256 value;
-    uint256 percentFromValue;
-    uint256 sumRate;
-
-    totalPercent = weiTodayMaximum.sub(weiTodayMinimum);
-    onePercent = totalPercent.div(100);
-    value = _value.sub(weiTodayMinimum);
-    percentFromValue = value.div(onePercent);
-    sumRate = bonus.div(100).mul(percentFromValue);
-    return bonus.sub(sumRate);
+    return usersETH[msg.sender];
   }
 
+  // Write user ETH value to mapping
+  function _postValidatePurchase(
+    address _beneficiary,
+    uint256 _weiAmount
+  )
+    internal
+  {
+    usersETH[_beneficiary] = _weiAmount;
+  }
 
   // Owirride rate count
   function _getTokenAmount(uint256 _weiAmount)
@@ -85,12 +81,7 @@ contract Auction is Crowdsale, Ownable{
       return _weiAmount.mul(rate);
     }
     else{
-      uint256 r = calculateRate(weiToday.add(weiRaised));
-      if (r < rate.sub(bonus)){
-        return _weiAmount.mul(rate.sub(bonus));
-      }else{
-        return _weiAmount.mul(r);
-      }
+      return _weiAmount.mul(rate.div(2));
     }
   }
 }
