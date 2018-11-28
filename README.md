@@ -2,7 +2,7 @@
 
 # create Uniswap exchange in console
 
-1) // get exchange instance address
+1) // get exchange instance address  
 var auction  
 Auction.deployed().then(a => auction = a)  
 var ex = auction.exchangeAddress()  
