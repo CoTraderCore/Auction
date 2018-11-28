@@ -3,9 +3,9 @@
 # create Uniswap exchange in console
 
 1) // get exchange instance address
-var auction
-Auction.deployed().then(a => auction = a)
-var ex = auction.exchangeAddress()
+var auction  
+Auction.deployed().then(a => auction = a)  
+var ex = auction.exchangeAddress()  
 
 2) //get contract
 var exchange
