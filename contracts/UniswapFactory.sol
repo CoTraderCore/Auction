@@ -22,14 +22,14 @@ contract UniswapFactory is FactoryInterface {
     mapping(address => address) tokenToExchange;
     mapping(address => address) exchangeToToken;
 
-    function launchExchange(address _token) public returns (address exchange) {
+    function launchExchange(address _token, address _owner) public returns (address exchange) {
         require(tokenToExchange[_token] == address(0));             //There can only be one exchange per token
         require(_token != address(0) && _token != address(this));
         UniswapExchange newExchange = new UniswapExchange(_token);
         tokenList.push(_token);
         tokenToExchange[_token] = newExchange;
         exchangeToToken[newExchange] = _token;
-        emit ExchangeLaunch(newExchange, _token);
+        emit ExchangeLaunch(newExchange, _token, _owner);
         return newExchange;
     }
 

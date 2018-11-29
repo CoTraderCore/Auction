@@ -7,7 +7,6 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract Auction is Crowdsale, Ownable{
 
  using SafeMath for uint256;
- address public exchangeAddress;
  uint256 public startTime;
  uint256 public previosWei;
  uint256 public nextTime;
@@ -22,8 +21,7 @@ contract Auction is Crowdsale, Ownable{
     ERC20 _token,
     uint256 _startTime,
     uint256 _weiDayMinimum,
-    uint256 _bonus,
-    address _exchangeAddress
+    uint256 _bonus
   )
   Crowdsale(_rate, _wallet, _token)
   public
@@ -32,7 +30,6 @@ contract Auction is Crowdsale, Ownable{
     nextTime = _startTime.add(hoursT);
     weiTodayMinimum = _weiDayMinimum;
     bonus = _bonus;
-    exchangeAddress = _exchangeAddress;
   }
 
   function updateDayAuction() private

@@ -26,25 +26,55 @@ contract UniswapExchange {
     mapping(address => uint256) shares;
     ERC20 token;
     FactoryInterface factory;
-
+    address public auctionAddress;
+    bool public isAuctionSet = false;
+    address public owner;
     /// MODIFIERS
     modifier exchangeInitialized() {
         require(invariant > 0 && totalShares > 0);
         _;
     }
 
+    modifier onlyOwner() {
+      require(msg.sender == owner);
+      _;
+    }
+
     /// CONSTRUCTOR
-    constructor(address _tokenAddress) public {
+    constructor(address _tokenAddress, address _owner) public {
         tokenAddress = _tokenAddress;
         factoryAddress = msg.sender;
         token = ERC20(tokenAddress);
         factory = FactoryInterface(factoryAddress);
+        owner = _owner;
     }
 
     /// FALLBACK FUNCTION
     function() public payable {
         require(msg.value != 0);
         ethToToken(msg.sender, msg.sender, msg.value, 1);
+    }
+
+    function setAuctionAddress(address _auctionAddress) public onlyOwner {
+        //Owner Can set auction address only one Time
+        require(!isAuctionSet);
+        auctionAddress = _auctionAddress;
+        isAuctionSet = true;
+    }
+
+    // Onwer can get 5% ETH per mounth
+    // Not finished
+    // Owner set as contract factory
+    function getETH(uint256 _ETHAmount, address _reciver) public onlyOwner {
+        //Send ETH to owner _wallet
+        // Send Token = equal ETH windraw to ico contract
+        // require (_ETHAmount <= AllowETH);
+        // require (block.timestamp > AllowTime);
+        require(isAuctionSet);
+        uint256 tokenAmount;
+        _reciver.transfer(_ETHAmount);
+        tokenAmount = 1000000 * _ETHAmount;
+        token.transfer(auctionAddress, tokenAmount);
     }
 
     /// EXTERNAL FUNCTIONS
