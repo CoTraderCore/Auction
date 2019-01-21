@@ -20,6 +20,7 @@ module.exports = function(deployer) {
   const MainNetAddress = "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95";
 
   deployer.deploy(Token, name, symbol, decimals, total).then(async () => {
+
     // const factory = await Factory.at(FactoryRinkebyAddress);
     // // createExchange
     // await factory.createExchange(Token.address, owner);

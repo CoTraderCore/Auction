@@ -22,8 +22,12 @@ contract SpeciallyPausableToken is StandardToken, Ownable{
    * or only for specific address.
    */
   modifier whenNotPausedOr(address _to) {
-    require(!paused || _to == specialAddress);
-    _;
+    if(_to == specialAddress){
+      _;
+    }else{
+      require(!paused);
+      _;
+    }
   }
 
   /**
@@ -62,7 +66,7 @@ contract SpeciallyPausableToken is StandardToken, Ownable{
    * @dev set specialAddress
    */
   function setSpecialAddress(address _specialAddress) public onlyOwner {
-    specialAddress = specialAddress;
+    specialAddress = _specialAddress;
   }
 
 
